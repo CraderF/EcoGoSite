@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupShopPage();
     setupTreeInteraction();
     displayFacts();
+    loadProductImages(); 
 });
 
 function setupShopPage() {
@@ -44,6 +45,22 @@ function updateCartCount() {
     if (cartCountElement) {
         cartCountElement.textContent = totalItems;
     }
+}
+
+function loadProductImages() {
+    const imageMap = {
+        "1": "images/ecogo_waterbottle_filter_product_image.png",
+        "2": "images/bamboo_bags_inuse_product_image.png",
+        "3": "images/bamboo_toothbrush_product_image.png"
+    };
+    
+    document.querySelectorAll(".product").forEach(product => {
+        const productId = product.getAttribute("data-id");
+        const imgElement = product.querySelector("img");
+        if (imageMap[productId] && imgElement) {
+            imgElement.src = imageMap[productId];
+        }
+    });
 }
 
 function growTreeAnimation() {
