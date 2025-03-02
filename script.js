@@ -1,3 +1,46 @@
+document.addEventListener("DOMContentLoaded", function () {
+    updateCartCount();
+    setupShopPage();
+    setupTreeInteraction();
+    displayFacts();
+});
+
+function setupShopPage() {
+    const addToCartButtons = document.querySelectorAll(".add-to-cart");
+    addToCartButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const product = this.closest(".product");
+            const item = {
+                id: product.getAttribute("data-id"),
+                name: product.getAttribute("data-name"),
+                price: parseFloat(product.getAttribute("data-price"))
+            };
+
+            addToCart(item);
+        });
+    });
+}
+
+function addToCart(item) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    const existingItem = cart.find(cartItem => cartItem.id === item.id);
+    if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+        item.quantity = 1;
+        cart.push(item);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    document.getElementById("cart-count").textContent = totalItems;
+}
 
 function growTreeAnimation() {
     const treeContainer = document.getElementById("tree-container");
@@ -13,6 +56,13 @@ function growTreeAnimation() {
             treeContainer.textContent = treeStages[stageIndex];
         }
     }, 1000); 
+}
+
+function setupTreeInteraction() {
+    const growButton = document.getElementById("grow-tree-btn");
+    if (growButton) {
+        growButton.addEventListener("click", growTreeAnimation);
+    }
 }
 
 function displayFacts() {
@@ -52,11 +102,4 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Please enter a search term.");
         }
     });
-
-    const growButton = document.getElementById("grow-tree-btn");
-    if (growButton) {
-        growButton.addEventListener("click", growTreeAnimation);
-    }
-
-    displayFacts();
 });
