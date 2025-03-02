@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoGo - Cart</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Cart</title>
 </head>
 <body>
-    <header>
-        <h1>EcoGo Cart</h1>
-        <a href="https://craderf.github.io/EcoGoSite/">Return Home</a>
-    </header>
-    
-    <section class="cart-container">
-        <h2>Your Cart</h2>
-        <p>Your cart is currently empty.</p>
-        <p><a href="shop.html">Continue Shopping</a></p>
-    </section>
-    
-    <footer>
-        <p>Group 1: Felix, Tamara</p>
-    </footer>
+    <h1>Cart</h1>
+    <div id="cart-items"></div>
+    <button onclick="clearCart()">Clear Cart</button>
+    <script>
+        function displayCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartDiv = document.getElementById('cart-items');
+            cartDiv.innerHTML = '';
+            if (cart.length === 0) {
+                cartDiv.innerHTML = '<p>Cart is empty.</p>';
+                return;
+            }
+            cart.forEach((item, index) => {
+                cartDiv.innerHTML += `<p>${item.name} - $${item.price} <button onclick="removeFromCart(${index})">Remove</button></p>`;
+            });
+        }
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart'));
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+        function clearCart() {
+            localStorage.removeItem('cart');
+            displayCart();
+        }
+        displayCart();
+    </script>
+    <a href="shop.html">Back to Shop</a>
 </body>
 </html>
