@@ -33,13 +33,17 @@ function addToCart(item) {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount();
+    updateCartCount(); // Update count after adding to cart
 }
 
 function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    document.getElementById("cart-count").textContent = totalItems;
+    const cartCountElement = document.getElementById("cart-count");
+
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
 }
 
 function growTreeAnimation() {
