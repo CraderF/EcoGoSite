@@ -34,7 +34,7 @@ function addToCart(item) {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount(); // Update count after adding to cart
+    updateCartCount(); 
 }
 
 function updateCartCount() {
