@@ -1,37 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2e8b57;
+        }
+        #cart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        #cart-items p {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        button {
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #246b4a;
+        }
+        .nav-links {
+            margin-top: 20px;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cart</h1>
-    <div id="cart-items"></div>
-    <button onclick="clearCart()">Clear Cart</button>
+
+    <h1>Your Shopping Cart</h1>
+    <div id="cart-container">
+        <div id="cart-items"></div>
+        <p><strong>Total: $<span id="total-price">0.00</span></strong></p>
+        <button onclick="clearCart()">Clear Cart</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="shop.html">Back to Shop</a>
+        <a href="index.html">Back to Home</a>
+    </div>
+
     <script>
         function displayCart() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let cartDiv = document.getElementById('cart-items');
+            let totalPrice = 0;
             cartDiv.innerHTML = '';
+
             if (cart.length === 0) {
                 cartDiv.innerHTML = '<p>Cart is empty.</p>';
+                document.getElementById('total-price').textContent = "0.00";
                 return;
             }
+
             cart.forEach((item, index) => {
-                cartDiv.innerHTML += `<p>${item.name} - $${item.price} <button onclick="removeFromCart(${index})">Remove</button></p>`;
+                totalPrice += parseFloat(item.price);
+                cartDiv.innerHTML += `<p>${item.name} - $${item.price} 
+                    <button onclick="removeFromCart(${index})">Remove</button></p>`;
             });
+
+            document.getElementById('total-price').textContent = totalPrice.toFixed(2);
         }
+
         function removeFromCart(index) {
             let cart = JSON.parse(localStorage.getItem('cart'));
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCart();
         }
+
         function clearCart() {
             localStorage.removeItem('cart');
             displayCart();
         }
+
         displayCart();
     </script>
-    <a href="shop.html">Back to Shop</a>
+
 </body>
 </html>
